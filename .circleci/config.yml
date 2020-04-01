@@ -10,17 +10,13 @@ jobs: # a collection of steps
       - checkout
       
 
-dependencies:
-  cache_directories:
-    - vendor
-  override:
-    - composer install
-
-test:
-  override:
-    - php vendor/bin/phpunit --testsuit Unit
-
-general:
-  branches:
-    only:
-      - master
+      - run:
+        shell: /bin/bash
+        command: |
+          mkdir -p phpunit-out
+          vendor/bin/phpunit --log-junit phpunit-out/junit.xml
+          when: always
+      - store_test_results:
+        path: phpunit-out
+      - store_artifacts:
+        path: phpunit-out          
